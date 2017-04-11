@@ -3,12 +3,28 @@
 #include <iostream>
 #include <stdio.h>
 #include "objLoader.h"
+#include "Matrix.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/norm.hpp>
+
+#define PI 3.14159265
 
 // Ponteiro para o objeto que carregará o modelo 3D (formato OBJ).
 objLoader *objData;
 
 unsigned int ViewPortWidth  = 512;
 unsigned int ViewPortHeight = 512;
+
+//Matrix M_Model;
+//Matrix R1;
+//Matrix R2;
+
+glm::mat4 M_Model;
+glm::mat4 R1;
+glm::mat4 R2;
+glm::vec3 camera_pos;
+glm::vec3 camera_look_at;
+glm::vec3 camera_look_up;
 
 //-----------------------------------------------------------------------------
 void display(void)
@@ -59,35 +75,35 @@ void display(void)
 	// Cada linha eh formada por 2 pontos (inicial e final).
 	///////////////////////////////////////////////////////////////////////////
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	// glColor3f(1.0f, 1.0f, 1.0f);
 
-	glBegin(GL_LINES);
-		for(int i=0; i<objData->faceCount; i++)
-		{
-			obj_face *o = objData->faceList[i];
+	// glBegin(GL_LINES);
+	// 	for(int i=0; i<objData->faceCount; i++)
+	// 	{
+	// 		obj_face *o = objData->faceList[i];
 
-			glVertex3f(	objData->vertexList[o->vertex_index[0]]->e[0], // primeira linha
-						objData->vertexList[o->vertex_index[0]]->e[1],
-						objData->vertexList[o->vertex_index[0]]->e[2]);
-			glVertex3f(	objData->vertexList[o->vertex_index[1]]->e[0],
-						objData->vertexList[o->vertex_index[1]]->e[1],
-						objData->vertexList[o->vertex_index[1]]->e[2]);
+	// 		glVertex3f(	objData->vertexList[o->vertex_index[0]]->e[0], // primeira linha
+	// 					objData->vertexList[o->vertex_index[0]]->e[1],
+	// 					objData->vertexList[o->vertex_index[0]]->e[2]);
+	// 		glVertex3f(	objData->vertexList[o->vertex_index[1]]->e[0],
+	// 					objData->vertexList[o->vertex_index[1]]->e[1],
+	// 					objData->vertexList[o->vertex_index[1]]->e[2]);
 
-			glVertex3f(	objData->vertexList[o->vertex_index[1]]->e[0],	// segunda linha
-						objData->vertexList[o->vertex_index[1]]->e[1],
-						objData->vertexList[o->vertex_index[1]]->e[2]);
-			glVertex3f(	objData->vertexList[o->vertex_index[2]]->e[0],
-						objData->vertexList[o->vertex_index[2]]->e[1],
-						objData->vertexList[o->vertex_index[2]]->e[2]);
+	// 		glVertex3f(	objData->vertexList[o->vertex_index[1]]->e[0],	// segunda linha
+	// 					objData->vertexList[o->vertex_index[1]]->e[1],
+	// 					objData->vertexList[o->vertex_index[1]]->e[2]);
+	// 		glVertex3f(	objData->vertexList[o->vertex_index[2]]->e[0],
+	// 					objData->vertexList[o->vertex_index[2]]->e[1],
+	// 					objData->vertexList[o->vertex_index[2]]->e[2]);
 
-			glVertex3f(	objData->vertexList[o->vertex_index[2]]->e[0],	// terceira linha
-						objData->vertexList[o->vertex_index[2]]->e[1],
-						objData->vertexList[o->vertex_index[2]]->e[2]);
-			glVertex3f(	objData->vertexList[o->vertex_index[0]]->e[0],
-						objData->vertexList[o->vertex_index[0]]->e[1],
-						objData->vertexList[o->vertex_index[0]]->e[2]);
-		}
-	glEnd();
+	// 		glVertex3f(	objData->vertexList[o->vertex_index[2]]->e[0],	// terceira linha
+	// 					objData->vertexList[o->vertex_index[2]]->e[1],
+	// 					objData->vertexList[o->vertex_index[2]]->e[2]);
+	// 		glVertex3f(	objData->vertexList[o->vertex_index[0]]->e[0],
+	// 					objData->vertexList[o->vertex_index[0]]->e[1],
+	// 					objData->vertexList[o->vertex_index[0]]->e[2]);
+	// 	}
+	// glEnd();
 
 	glFlush();
 	glutSwapBuffers();
@@ -258,7 +274,7 @@ void PrintModelInfo(objLoader* ptr)
 // Libera a memoria do objeto responsavel por guardar dados do modelo.
 void FreeMemFunc(void)
 {
-	std::clog << "Exiting...\n";
+	//std::clog << "Exiting...\n";
 
 	if (!objData)
 		delete objData;
@@ -277,12 +293,42 @@ int main(int argc, char **argv)
 	//PrintModelInfo(objData);
 
 	glutInit(&argc,argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
-	glutInitWindowSize(512, 512);
-	glutInitWindowPosition(100,100);
-	glutCreateWindow("OBJ Loader");
+	//glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
+	//glutInitWindowSize(512, 512);
+	//glutInitWindowPosition(100,100);
+	//glutCreateWindow("OBJ Loader");
 
-	glutDisplayFunc(display);
+	//glutDisplayFunc(display);
+
+	M_Model = glm::mat4(1.0f);
+	R1 = matrixRotationX(30.0f);
+	R2 = matrixRotationY(30.0f);
+
+	M_Model = R1 * R2;
+
+	camera_pos = glm::vec3(0.0f, 0.0f, 3.0f);
+	camera_look_at = glm::vec3(0.0f, 0.0f, 0.0f);
+	camera_look_up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	glm::vec3 z_camera = -(camera_look_at - camera_pos) / glm::l1Norm(camera_look_at - camera_pos);
+	glm::vec3 x_camera = glm::cross(camera_look_up, z_camera) / glm::l1Norm(glm::cross(camera_look_up, z_camera));
+	glm::vec3 y_camera = glm::cross(z_camera, x_camera);
+
+	glm::mat4 Bt = createMatrixWithVec3(x_camera, y_camera, z_camera);
+	glm::mat4 T = transposeMatrix(camera_pos[0], camera_pos[1], camera_pos[2]);
+
+	for(int i=0; i<4; i++){
+		printf("[ ");
+		for(int j=0; j<4; j++){
+			printf("| %f |", T[i][j]);
+		}
+		printf("]\n");
+	}
+
+	for(int i=0; i<3; i++){
+		printf("(%f)", y_camera[i]);
+	}
+	printf("\n");
 
 	atexit(FreeMemFunc);
 
