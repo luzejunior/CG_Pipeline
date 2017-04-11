@@ -315,12 +315,20 @@ int main(int argc, char **argv)
 	glm::vec3 y_camera = glm::cross(z_camera, x_camera);
 
 	glm::mat4 Bt = createMatrixWithVec3(x_camera, y_camera, z_camera);
-	glm::mat4 T = transposeMatrix(camera_pos[0], camera_pos[1], camera_pos[2]);
+	glm::mat4 T = transposeMatrix(-camera_pos[0], -camera_pos[1], -camera_pos[2]);
+	glm::mat4 M_View = T * Bt;
+
+	glm::mat4 M_Model_View = M_Model * M_View;
+
+	int d = 1;
+	glm::mat4 M_Projection = createM_Projection(d);
+
+	glm::mat4 M_Model_View_Projection = M_Model_View * M_Projection;
 
 	for(int i=0; i<4; i++){
 		printf("[ ");
 		for(int j=0; j<4; j++){
-			printf("| %f |", T[i][j]);
+			printf("| %f |", M_Model_View_Projection[i][j]);
 		}
 		printf("]\n");
 	}

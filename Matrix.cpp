@@ -95,6 +95,16 @@ glm::mat4 createMatrixWithVec3(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3){
 	return m_aux;
 }
 
+glm::mat4 createM_Projection(float d){
+	glm::mat4 m_aux = glm::mat4(1.0f);
+
+	m_aux[2][3] = d;
+	m_aux[3][2] = -1/d;
+	m_aux[3][3] = 0;
+
+	return m_aux;
+}
+
 Matrix matrixMultiply(Matrix m1, Matrix m2){
 	Matrix m_aux;
 	m_aux.loadIdentity();

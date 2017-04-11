@@ -17,6 +17,7 @@ glm::mat4 transposeMatrix(float, float, float);
 glm::mat4 matrixRotationX(float);
 glm::mat4 matrixRotationY(float);
 glm::mat4 createMatrixWithVec3(glm::vec3, glm::vec3, glm::vec3);
+glm::mat4 createM_Projection(float);
 Matrix matrixMultiply(Matrix, Matrix);
 
 #endif // MATRIX_H
