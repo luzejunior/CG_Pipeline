@@ -8,38 +8,6 @@ using namespace std;
 
 #define PI 3.14159265
 
-void Matrix::loadIdentity(){
-	//Linha 1:
-	m[0][0] = 1.0f;
-	m[0][1] = 0.0f;
-	m[0][2] = 0.0f;
-	m[0][3] = 0.0f;
-
-	//Linha 2:
-	m[1][0] = 0.0f;
-	m[1][1] = 1.0f;
-	m[1][2] = 0.0f;
-	m[1][3] = 0.0f;
-
-	//Linha 3:
-	m[2][0] = 0.0f;
-	m[2][1] = 0.0f;
-	m[2][2] = 1.0f;
-	m[2][3] = 0.0f;
-	
-	//Linha 4:
-	m[3][0] = 0.0f;
-	m[3][1] = 0.0f;
-	m[3][2] = 0.0f;
-	m[3][3] = 1.0f;
-}
-
-void Matrix::matrixScale(float x, float y, float z){
-	m[0][0] *= x;
-	m[1][1] *= y;
-	m[2][2] *= z;
-}
-
 Matrix::~Matrix()
 {
     
@@ -51,6 +19,8 @@ glm::mat4 scaleMatrix(float x, float y, float z){
 	m_aux[0][0] *= x;
 	m_aux[1][1] *= y;
 	m_aux[2][2] *= z;
+
+	return m_aux;
 }
 
 glm::mat4 translateMatrix(float x, float y, float z){
@@ -109,53 +79,6 @@ glm::mat4 createM_Projection(float d){
 	m_aux[2][3] = d;
 	m_aux[3][2] = -1/d;
 	m_aux[3][3] = 0;
-
-	return m_aux;
-}
-
-Matrix matrixMultiply(Matrix m1, Matrix m2){
-	Matrix m_aux;
-	m_aux.loadIdentity();
-
-	for(int i=0; i<4; i++){
-		printf("[ ");
-		for(int j=0; j<4; j++){
-			printf("| %f |", m1.m[i][j]);
-		}
-		printf("]\n");
-	}
-
-	printf("\n");
-
-	for(int i=0; i<4; i++){
-		printf("[ ");
-		for(int j=0; j<4; j++){
-			printf("| %f |", m2.m[i][j]);
-		}
-		printf("]\n");
-	}
-
-	printf("\n");
-
-	m_aux.m[0][0] = m1.m[0][0]*m2.m[0][0] + m1.m[0][1]*m2.m[1][0] + m1.m[0][2]*m2.m[2][0] + m1.m[0][3]*m2.m[3][0];
-	m_aux.m[0][1] = m1.m[0][0]*m2.m[0][1] + m1.m[0][1]*m2.m[1][1] + m1.m[0][2]*m2.m[2][1] + m1.m[0][3]*m2.m[3][1];
-	m_aux.m[0][2] = m1.m[0][0]*m2.m[0][2] + m1.m[0][1]*m2.m[1][2] + m1.m[0][2]*m2.m[2][2] + m1.m[0][3]*m2.m[3][2];
-	m_aux.m[0][3] = m1.m[0][0]*m2.m[0][3] + m1.m[0][1]*m2.m[1][3] + m1.m[0][2]*m2.m[2][3] + m1.m[0][3]*m2.m[3][3];
-
-	m_aux.m[1][0] = m1.m[1][0]*m2.m[0][0] + m1.m[1][1]*m2.m[1][0] + m1.m[1][2]*m2.m[2][0] + m1.m[1][3]*m2.m[3][0];
-	m_aux.m[1][1] = m1.m[1][0]*m2.m[0][1] + m1.m[1][1]*m2.m[1][1] + m1.m[1][2]*m2.m[2][1] + m1.m[1][3]*m2.m[3][1];
-	m_aux.m[1][2] = m1.m[1][0]*m2.m[0][2] + m1.m[1][1]*m2.m[1][2] + m1.m[1][2]*m2.m[2][2] + m1.m[1][3]*m2.m[3][2];
-	m_aux.m[1][3] = m1.m[1][0]*m2.m[0][3] + m1.m[1][1]*m2.m[1][3] + m1.m[1][2]*m2.m[2][3] + m1.m[1][3]*m2.m[3][3];
-
-	m_aux.m[2][0] = m1.m[2][0]*m2.m[0][0] + m1.m[2][1]*m2.m[1][0] + m1.m[2][2]*m2.m[2][0] + m1.m[2][3]*m2.m[3][0];
-	m_aux.m[2][1] = m1.m[2][0]*m2.m[0][1] + m1.m[2][1]*m2.m[1][1] + m1.m[2][2]*m2.m[2][1] + m1.m[2][3]*m2.m[3][1];
-	m_aux.m[2][2] = m1.m[2][0]*m2.m[0][2] + m1.m[2][1]*m2.m[1][2] + m1.m[2][2]*m2.m[2][2] + m1.m[2][3]*m2.m[3][2];
-	m_aux.m[2][3] = m1.m[2][0]*m2.m[0][3] + m1.m[2][1]*m2.m[1][3] + m1.m[2][2]*m2.m[2][3] + m1.m[2][3]*m2.m[3][3];
-
-	m_aux.m[3][0] = m1.m[3][0]*m2.m[0][0] + m1.m[3][1]*m2.m[1][0] + m1.m[3][2]*m2.m[2][0] + m1.m[3][3]*m2.m[3][0];
-	m_aux.m[3][1] = m1.m[3][0]*m2.m[0][1] + m1.m[3][1]*m2.m[1][1] + m1.m[3][2]*m2.m[2][1] + m1.m[3][3]*m2.m[3][1];
-	m_aux.m[3][2] = m1.m[3][0]*m2.m[0][2] + m1.m[3][1]*m2.m[1][2] + m1.m[3][2]*m2.m[2][2] + m1.m[3][3]*m2.m[3][2];
-	m_aux.m[3][3] = m1.m[3][0]*m2.m[0][3] + m1.m[3][1]*m2.m[1][3] + m1.m[3][2]*m2.m[2][3] + m1.m[3][3]*m2.m[3][3];
 
 	return m_aux;
 }

@@ -14,10 +14,6 @@ objLoader *objData;
 unsigned int ViewPortWidth  = 512;
 unsigned int ViewPortHeight = 512;
 
-//Matrix M_Model;
-//Matrix R1;
-//Matrix R2;
-
 glm::mat4 M_Model = glm::mat4(1.0f);;
 glm::mat4 R1 = matrixRotationX(0.0f);
 glm::mat4 R2 = matrixRotationY(0.5f);
@@ -104,27 +100,6 @@ void MyGlDraw(void)
 
  	 	drawTriangle((int)v1[0], (int)v1[1], colorWhite, (int)v2[0], (int)v2[1], colorWhite, (int)v3[0], (int)v3[1], colorWhite);
  	}
-
-	//*************************************************************************
-	// Chame aqui as funções do mygl.h
-	//*************************************************************************
-	//putPixel(0, 1, colorGreen);
-	//putPixel(0, 0, colorGreen);	
-	//putPixel(1, 0, colorGreen);
-	//putPixel(1, 1, colorGreen);
-	//drawLine(0,0, colorRed, 511, 511, colorGreen); //1 octante
-	// drawLine(0,0, colorRed, 100, 200, colorGreen); //2 octante
-	// drawLine(0,0, colorRed, -100, 200, colorGreen); //3 octante
-	//drawLine(0,0, colorRed, -200, 100, colorGreen); //4 octante
-	//drawLine(0,0, colorRed, -200, -100, colorGreen); //5 octante
-	// drawLine(0,0, colorRed, -100, -200, colorGreen); //6 octante
-	//drawLine(0,0, colorRed, 100, -200, colorGreen); //7 octante
-	//drawLine(0,0, colorRed, 200, -100, colorGreen); //8 octante
-	//drawLine(-100, 0, colorRed, -100, 90, colorGreen);
-	//drawLine(-100, 0, colorRed, 100, 0, colorBlue);
-	//drawLine(-100, 90, colorGreen, 100, 0, colorBlue);
-	//drawTriangle(292, 366, colorBlue, 275, 379, colorBlue, 275, 379, colorBlue);
-	//drawTriangle(309, 290, colorBlue, 311, 296, colorBlue, 309, 290, colorBlue);
 }
 
 void cleanScreen(){
@@ -141,16 +116,6 @@ int main(int argc, char **argv)
 	objData = new objLoader();			// cria o objeto que carrega o modelo
 	objData->load("monkey_head2.obj");	// a carga do modelo é indicada atraves do nome do arquivo. 
 										// Neste caso, deve ser sempre do tipo OBJ.
-
-	// Habilite esta função se você deseja imprimir na tela dados do modelo
-	// gerados durante a sua carga.
-	//PrintModelInfo(objData);
-
-	//glutInit(&argc,argv);
-	//glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
-	//glutInitWindowSize(512, 512);
-	//glutInitWindowPosition(100,100);
-	//glutCreateWindow("OBJ Loader");
 
 	// Inicializações.
 	InitOpenGL(&argc, argv);

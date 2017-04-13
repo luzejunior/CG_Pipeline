@@ -6,9 +6,6 @@
 class Matrix
 {
     public:
-    	float m[4][4];
-        void loadIdentity();
-        void matrixScale(float, float, float);
         virtual ~Matrix();
     private:
 };
@@ -19,6 +16,5 @@ glm::mat4 matrixRotationX(float);
 glm::mat4 matrixRotationY(float);
 glm::mat4 createMatrixWithVec3(glm::vec3, glm::vec3, glm::vec3);
 glm::mat4 createM_Projection(float);
-Matrix matrixMultiply(Matrix, Matrix);
 
 #endif // MATRIX_H
