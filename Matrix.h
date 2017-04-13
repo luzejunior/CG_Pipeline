@@ -13,7 +13,8 @@ class Matrix
     private:
 };
 
-glm::mat4 transposeMatrix(float, float, float);
+glm::mat4 scaleMatrix(float, float, float);
+glm::mat4 translateMatrix(float, float, float);
 glm::mat4 matrixRotationX(float);
 glm::mat4 matrixRotationY(float);
 glm::mat4 createMatrixWithVec3(glm::vec3, glm::vec3, glm::vec3);

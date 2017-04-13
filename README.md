@@ -1,2 +1,1 @@
-# CG_Pipeline
-Complete Pipeline for Computer Graphics
+# CG_Project1

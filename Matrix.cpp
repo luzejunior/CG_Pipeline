@@ -45,7 +45,15 @@ Matrix::~Matrix()
     
 }
 
-glm::mat4 transposeMatrix(float x, float y, float z){
+glm::mat4 scaleMatrix(float x, float y, float z){
+	glm::mat4 m_aux = glm::mat4(1.0f);
+
+	m_aux[0][0] *= x;
+	m_aux[1][1] *= y;
+	m_aux[2][2] *= z;
+}
+
+glm::mat4 translateMatrix(float x, float y, float z){
 	glm::mat4 m_aux = glm::mat4(1.0f);
 	//m_aux.loadIdentity();
 
